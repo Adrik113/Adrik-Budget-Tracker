@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Adrik-5.2-Lab/static/css/main.a5db1b61.css",
+    "main.js": "/Adrik-5.2-Lab/static/js/main.2f1435d8.js",
+    "static/js/453.b6b39428.chunk.js": "/Adrik-5.2-Lab/static/js/453.b6b39428.chunk.js",
+    "index.html": "/Adrik-5.2-Lab/index.html",
+    "main.a5db1b61.css.map": "/Adrik-5.2-Lab/static/css/main.a5db1b61.css.map",
+    "main.2f1435d8.js.map": "/Adrik-5.2-Lab/static/js/main.2f1435d8.js.map",
+    "453.b6b39428.chunk.js.map": "/Adrik-5.2-Lab/static/js/453.b6b39428.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a5db1b61.css",
+    "static/js/main.2f1435d8.js"
+  ]
+}
