@@ -12,18 +12,19 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18' # Change to your version if needed
+        cache: 'npm'
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Run tests
-      run: npm test
+      run: npm test -- --watchAll=false
 
     - name: Build app
       run: npm run build
@@ -32,6 +33,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
        name: react-build
-       path: build
+       path: build/
 
 
