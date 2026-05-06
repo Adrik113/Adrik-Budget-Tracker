@@ -1,42 +1,40 @@
-import React from 'react';
-
+import React from "react";
 
 function ExpenseInputField({
-    value,
-    onChange,
-    categories,
-    selectedCategory,
-    setSelectedCategory
+  value,
+  onChange,
+  categories,
+  selectedCategory,
+  setSelectedCategory,
 }) {
-    return (
-        <div style={{ marginBottom: "10px"}}>
+  return (
+    <div style={{ marginBottom: "10px" }}>
 
-            {/* Amount Input */}
-            <input 
-                type="number"
-                placeholder="Enter expense amount"
-                value={value}
-                onChange={onChange}
-            />
-            {/* Category Dropdown */}
-            <select 
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                style={{ marginLeft: "10px"}}
-                >
-                    <option value="">Select Category</option>
+      {/* Amount Input */}
+      <input
+        type="number"
+        placeholder="Enter expense amount"
+        value={value}
+        onChange={onChange}
+      />
 
-                    {categories.map((cat, index) => (
-                        <option key={index} value={cat}>
-                            {cat}
-                        </option>
-                    ))}
-                </select>
-        </div>
-    );
+      {/* Category Dropdown */}
+      <select
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+        style={{ marginLeft: "10px" }}
+      >
+        <option value="">Select Category</option>
+
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+
+    </div>
+  );
 }
-
-const ExpenseInputField = ({value, onChange}) => ( <input type="text" placeholder='Enter expense amount' value={value} onChange={onChange} />);
-
 
 export default ExpenseInputField;
