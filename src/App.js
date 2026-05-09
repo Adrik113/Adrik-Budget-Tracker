@@ -66,68 +66,94 @@ function App() {
 
   return (
     <div className="App">
+
       <Header />
 
-      {/* Income */}
-      <IncomeInputField
-        value={income}
-        onChange={(e) =>
-          setIncome(
-            e.target.value ? parseFloat(e.target.value) : 0
-          )
-        }
-      />
+      {/*Dashboard cards */}
+      <div className="dashboard-cards">
 
-      {/* Expense Input */}
-      <ExpenseInputField
-        value={expenseAmount}
-        onChange={(e) => setExpenseAmount(e.target.value)}
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+        <div className="card">
+          <h3>Income</h3>
+          <p>${income.toFixed(2)}</p>
+        </div>
 
-      {/* Buttons */}
-      <AddExpenseButton onClick={handleAddExpense} />
-      <ClearIncomeButton onClick={handleClearIncome} />
-      <ClearExpensesButton onClick={handleClearExpenses} />
-      <ToggleChartButton onClick={handleToggleChart} />
+        <div className="card">
+          <h3>Expenses</h3>
+          <p>${totalExpenses.toFixed(2)}</p>
+        </div>
 
-      {/* Budget System */}
-      <BudgetSettings
-        categories={categories}
-        budgets={budgets}
-        setBudgets={setBudgets}
-      />
+        <div className="card">
+          <h3>Remaining Budget</h3>
+          <p>${remainingBudget.toFixed(2)}</p>
+        </div>
 
-      <CategoryProgress
-        categories={categories}
-        budgets={budgets}
-        expenses={expenses}
-      />
-
-      {/* Summary */}
-      <div>
-        Expenses:{" "}
-        {expenses.length > 0
-          ? expenses
-              .map((e) => `${e.category}: $${e.amount}`)
-              .join(", ")
-          : "No expenses recorded"}
       </div>
 
-      <div>Income: ${income.toFixed(2)}</div>
-      <div>Total Expenses: ${totalExpenses.toFixed(2)}</div>
-      <div>Remaining Budget: ${remainingBudget.toFixed(2)}</div>
+      {/*Transaction Area */}
+      <div className="card">
 
-      {/* Charts */}
-      {showPieChart ? (
-        <CustomPiechart expenses={expenses} />
-      ) : (
-        <BarChart income={income} expenses={totalExpenses} />
-      )}
-    </div>
-  );
+        <h2>Add Expense</h2>
+
+        <IncomeInputField 
+        value={income} 
+        onChange={(e) => 
+          setIncome(
+            e.target.value ? parseFloat(e.target.value)
+            : 0
+          )
+        }
+        />
+
+        <ExpenseInputField
+          value={expenseAmount}
+          onChange={(e) =>
+            setExpenseAmount(e.target.value)
+          }
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+
+        <div className="button-row">
+          <AddExpenseButton onClick={handleAddExpense} />
+          <ClearIncomeButton onClick={handleClearIncome} />
+          <ClearExpensesButton onClick={handleClearExpenses} />
+          <ToggleChartButton onClick={handleToggleChart} />
+        </div>
+  
+      </div>
+
+      {/* Bottom Section */}
+      <div className="bottom-grid">
+
+        <div className="card">
+          <BudgetSettings
+            categories={categories}
+              budgets={budgets}
+              setBudgets={setBudgets}
+              />
+
+              <CategoryProgress
+                categories={categories}
+                expenses={expenses}
+                budgets={budgets}
+              />
+        </div>
+
+        <div className="card">
+          {showPieChart ? (
+            <CustomPiechart expenses ={expenses} />
+          ) : (
+            <BarChart  income={income}expenses={expenses} 
+            />
+          )}
+        </div>
+
+       </div>
+
+     </div>
+
+        );
+   
 }
-
 export default App;
