@@ -25,20 +25,23 @@ body {
 }
 
 .card {
-  background: #1e1e1e;
+  background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  margin: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
 }
 
 .card h3 {
   margin-top: 0;
-  opacity: .7;
+  opacity: 0.9;
+  color:#ffffff;
 }
 
 .card p {
   font-size: 28px;
   font-weight: bold;
+  color:  #ffffff;
 }
 
 .button-row {
@@ -52,6 +55,133 @@ input,
 select {
   padding: 10px;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #444;
+  background: #1f2430;
+  color: #ffffff;
   margin-right: 10px;
 }
+
+input:placeholder {
+  color: #aaa;
+}
+
+button {
+  background: #4c7dff;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;;
+}
+
+button:hover {
+  background: #3a66d6;
+}
+
+.alert-container {
+  margin: 20px 0;
+}
+
+.alert-card {
+  background: #5a1f1f;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+
+
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #222;
+  color: white;
+}
+
+.setting-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.card h3, 
+.card p {
+  color: inherit;
+}
+.settings-panel {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 260px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #222;
+  color: white;
+  z-index: 1000;
+}
+
+.App.light {
+  background: #f4f6f8;
+  color: #111;
+}
+
+.App.dark {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+
+/* Font Sizes */
+.App.small {
+  font-size: 14px;
+}
+
+.App.medium {
+  font-size: 16px;
+}
+
+.App.large {
+  font-size: 20px;
+}
+
+.setting-panel button.active {
+  background: #00c49f;
+  color: black;
+}
+
+.App.dark .card {
+  background: #1e293b;
+  color: #ffffff;
+}
+.App.light .card {
+  background: #ffffff;
+  color: #111111;
+}
+
+.App { 
+  font-family: Arial, Helvetica, sans-serif;
+  transition: all 0.2s ease;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  padding: 20px;
+}
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

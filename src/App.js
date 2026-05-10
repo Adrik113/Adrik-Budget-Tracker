@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Header from "./Components/Header";
 import AddExpenseButton from "./Components/AddExpenseButton";
 import ClearExpensesButton from "./Components/ClearExpensesButton";
@@ -10,6 +10,8 @@ import CustomPiechart from "./Components/PieChart";
 import BarChart from "./Components/BarChart";
 import BudgetSettings from "./Components/BudgetSettings";
 import CategoryProgress from "./Components/CategoryProgress";
+import IncomeExpenseChart from "./Components/IncomeExpenseChart";
+import { useSettings } from "./context/settingsContext";
 import "./App.css";
 
 function App() {
@@ -18,8 +20,10 @@ function App() {
   const [income, setIncome] = useState(0);
   const [expenseAmount, setExpenseAmount] = useState("");
   const [showPieChart, setShowPieChart] = useState(true);
-  const [budgets, setBudgets] = useState([]);
+  const [budgets, setBudgets] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [showSettings, setShowSettings] = useState(false);
+  const { theme, setTheme, fontSize, setFontSize } = useSettings();
 
   // ===== CATEGORIES =====
   const categories = [
@@ -29,6 +33,37 @@ function App() {
     "Utilities",
     "Rent",
   ];
+    
+    useEffect(() => {
+      const savedExpenses = 
+      JSON.parse(
+        localStorage.getItem("expenses")
+      ) || [];
+
+      const savedIncome = 
+      JSON.parse(
+        localStorage.getItem("income")
+      ) || 0;
+
+      const savedBudgets = 
+      JSON.parse(
+        localStorage.getItem("budgets")
+       ) || {};
+
+      setExpenses(savedExpenses);
+      setIncome(savedIncome);
+      setBudgets(savedBudgets);
+    }, []);
+      
+    useEffect(() => {
+
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+      localStorage.setItem("income", JSON.stringify(income));
+      localStorage.setItem("budgets", JSON.stringify(budgets));
+    }, [expenses, income, budgets]);
+    
+
+  
 
   // ===== ADD EXPENSE (FIXED) =====
   const handleAddExpense = () => {
@@ -64,13 +99,66 @@ function App() {
 
   const remainingBudget = income - totalExpenses;
 
-  return (
-    <div className="App">
+  const overBudgetAlerts = categories
+  .map((category) => {
+    const spent = expenses
+      .filter((e) => e.category === category)
+      .reduce((sum, e) => sum + e.amount, 0);
 
-      <Header />
+    const budget = budgets[category] || 0;
+
+    if (budget > 0 && spent > budget) {
+      return {
+        category, 
+        overBy: spent - budget,
+      };
+    }
+
+    return null;
+  })
+  .filter(Boolean);
+   
+
+  return (
+    <div className={`App ${theme} ${fontSize}`}>
+
+      <Header onToggleSettings={() => setShowSettings(!showSettings)} />
+
+        {showSettings && (
+          <div className="settings-panel">
+            <h2>Settings</h2>
+
+            <h3>Theme</h3>
+
+            <button onClick={() => setTheme("light")}>
+              Light Mode 
+            </button>
+
+            <button onClick={() => setTheme("dark")}>
+              Dark Mode
+            </button>
+
+            {/* Font Size */}
+            <h3>Font Size</h3>
+
+            <button onClick={() => setFontSize("small")}>
+              Small
+            </button>
+
+            <button onClick={() => setFontSize("medium")}>
+              Medium
+            </button>
+
+            <button onClick={() => setFontSize("large")}>
+              Large
+            </button>
+
+           
+          </div>
+        )}
 
       {/*Dashboard cards */}
-      <div className="dashboard-cards">
+      <div className="dashboard-grid">
 
         <div className="card">
           <h3>Income</h3>
@@ -88,6 +176,21 @@ function App() {
         </div>
 
       </div>
+
+       {overBudgetAlerts.length > 0 && (
+            <div className="alert-container">
+
+              {overBudgetAlerts.map((alert) => (
+                <div
+                  key={alert.category}
+                  className="alert-card"
+                  >
+                  ⚠ Over budget in {alert.category} by $
+                  {alert.overBy.toFixed(2)}
+                </div>
+              ))}
+            </div>
+          )}
 
       {/*Transaction Area */}
       <div className="card">
@@ -123,6 +226,51 @@ function App() {
   
       </div>
 
+      {/* Transaction History */}
+<div className="card">
+
+  <h2>Transaction History</h2>
+
+  {expenses.length === 0 ? (
+    <p>No transactions yet.</p>
+  ) : (
+    <div className="transaction-list">
+
+      {expenses.map((expense) => (
+        <div
+          key={expense.id}
+          className="transaction-item"
+        >
+
+          <strong>
+            {expense.category}
+          </strong>
+
+          <span>
+            ${expense.amount.toFixed(2)}
+          </span>
+
+          <button
+            onClick={() =>
+              setExpenses((prevExpenses) =>
+                prevExpenses.filter(
+                  (e) => e.id !== expense.id
+                )
+              )
+            }
+          >
+            Delete
+          </button>
+
+        </div>
+      ))}
+
+    </div>
+  )}
+
+</div>
+
+
       {/* Bottom Section */}
       <div className="bottom-grid">
 
@@ -141,10 +289,19 @@ function App() {
         </div>
 
         <div className="card">
+
+          <h2>Overview</h2>
+          <IncomeExpenseChart
+            income={income}
+            expenses={totalExpenses}
+          />
+
+         
+
           {showPieChart ? (
-            <CustomPiechart expenses ={expenses} />
+            <CustomPiechart income={income}expenses ={expenses} />
           ) : (
-            <BarChart  income={income}expenses={expenses} 
+            <BarChart  income={income} expenses={expenses} 
             />
           )}
         </div>

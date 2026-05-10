@@ -1,63 +1,78 @@
 import React from "react";
 
-function CategoryProgress({ categories, budgets, expenses }) {
-  // calculate spent per category
-  const getSpent = (category) =>
-    expenses
+function CategoryProgress({
+  categories,
+  expenses,
+  budgets
+}) {
+
+  const getSpent = (category) => {
+    return expenses
       .filter((e) => e.category === category)
       .reduce((sum, e) => sum + e.amount, 0);
+  };
 
-  // get budget limit
   const getBudget = (category) => {
-    const found = budgets.find((b) => b.category === category);
-    return found ? found.limit : 0;
+    return budgets[category] || 0;
   };
 
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div>
+
       <h2>Budget Progress</h2>
 
-      {categories.map((cat) => {
-        const spent = getSpent(cat);
-        const budget = getBudget(cat);
+      {categories.map((category) => {
 
-        const percent = budget > 0 ? (spent / budget) * 100 : 0;
+        const spent = getSpent(category);
+        const budget = getBudget(category);
 
-        let barColor = "green";
-        if (percent >= 100) barColor = "red";
-        else if (percent >= 80) barColor = "orange";
+        const percent =
+          budget > 0
+            ? Math.min((spent / budget) * 100, 100)
+            : 0;
 
         return (
-          <div key={cat} style={{ marginBottom: "15px" }}>
-            <strong>{cat}</strong>
+          <div
+            key={category}
+            style={{ marginBottom: "15px" }}
+          >
+
+            <div>
+              {category}: $
+              {spent.toFixed(2)} / $
+              {budget.toFixed(2)}
+            </div>
 
             <div
               style={{
-                height: "10px",
                 width: "100%",
-                background: "#ddd",
-                borderRadius: "5px",
-                marginTop: "5px",
+                background: "#444",
+                borderRadius: "8px",
+                height: "20px",
               }}
             >
+
               <div
                 style={{
-                  height: "10px",
-                  width: `${Math.min(percent, 100)}%`,
-                  background: barColor,
-                  borderRadius: "5px",
+                  width: `${percent}%`,
+                  background:
+                    spent > budget
+                      ? "#ff4d4d"
+                      : "#00C49F",
+                  height: "100%",
+                  borderRadius: "8px",
                 }}
               />
+
             </div>
 
-            <small>
-              ${spent} / ${budget} ({percent.toFixed(0)}%)
-            </small>
           </div>
         );
       })}
+
     </div>
   );
 }
+
 
 export default CategoryProgress;
