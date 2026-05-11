@@ -35,47 +35,68 @@ function App() {
   ];
     
     useEffect(() => {
-      const savedExpenses = 
-      JSON.parse(
-        localStorage.getItem("expenses")
-      ) || [];
+     
+      // Load expenses from backend 
+      fetch ("http://localhost:8000/api/expenses")
+       .then((res) => res.json())
+       .then((data) => {
+        setExpenses(data);
+       })
+       .catch((err) => {console.error("Backend Connection Failed:",
+        err
+       )
+    });
+    
+       
 
-      const savedIncome = 
-      JSON.parse(
-        localStorage.getItem("income")
-      ) || 0;
+       // Keeping Local for Now 
+       const savedIncome = 
+        JSON.parse(
+          localStorage.getItem("income")
+        ) || 0;
 
-      const savedBudgets = 
-      JSON.parse(
-        localStorage.getItem("budgets")
-       ) || {};
+        const savedBudgets = 
+        JSON.parse(
+          localStorage.getItem("budgets")
+        ) || {};
 
-      setExpenses(savedExpenses);
-      setIncome(savedIncome);
-      setBudgets(savedBudgets);
+        setIncome(savedIncome);
+        setBudgets(savedBudgets);
     }, []);
       
     useEffect(() => {
 
-      localStorage.setItem("expenses", JSON.stringify(expenses));
       localStorage.setItem("income", JSON.stringify(income));
       localStorage.setItem("budgets", JSON.stringify(budgets));
-    }, [expenses, income, budgets]);
+    }, [income, budgets]);
     
 
   
 
   // ===== ADD EXPENSE (FIXED) =====
-  const handleAddExpense = () => {
+  const handleAddExpense = async () => {
     if (!expenseAmount || !selectedCategory) return;
 
     const newExpense = {
-      id: Date.now(),
       amount: parseFloat(expenseAmount),
       category: selectedCategory,
     };
 
-    setExpenses((prev) => [...prev, newExpense]);
+    const response = await fetch (
+      "http://localhost:8000/api/expenses",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(newExpense)
+      }
+    );
+    const savedExpense = await response.json();
+
+    setExpenses((prev) => [...prev, savedExpense]);
     setExpenseAmount("");
   };
 
@@ -238,7 +259,7 @@ function App() {
 
       {expenses.map((expense) => (
         <div
-          key={expense.id}
+          key={expense._id}
           className="transaction-item"
         >
 
@@ -251,16 +272,24 @@ function App() {
           </span>
 
           <button
-            onClick={() =>
-              setExpenses((prevExpenses) =>
-                prevExpenses.filter(
-                  (e) => e.id !== expense.id
-                )
+            onClick={async () => {
+              await fetch(
+                `http://localhost:8000/api/expenses/${expense._id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+
+              setExpenses((prevExpenses) => 
+              prevExpenses.filter(
+                (e) => e._id !== expense._id
               )
-            }
-          >
+            );
+
+          }}
+        >
             Delete
-          </button>
+         </button>
 
         </div>
       ))}
