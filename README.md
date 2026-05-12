@@ -1,4 +1,4 @@
-# Adrik Budget Tracker
+Adrik Budget Tracker
 
 A simple and intuitive web application to help users track their monthly income and expenses. Built with JavaScript and TypeScript, this app visualizes budgeting data with interactive charts for easy financial management.
 
