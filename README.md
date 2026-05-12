@@ -27,7 +27,37 @@ The application interface is shown below. These screenshots demonstrate the core
 All images are located in the `/screenshots` folder.
 
 ## Installation
+### Prerequisites
 
-1. Clone the repository  
+- Docker Desktop installed
+
+### Run with Docker (Recommended)
+
+1. Clone the repository
+
    ```bash
    git clone https://github.com/Adrik113/Adrik-Budget-Tracker.git
+   cd Adrik-Budget-Tracker
+   Start all services
+
+   docker compose up --build
+
+   Open the application
+
+Frontend: http://localhost:3000
+
+Backend API: http://localhost:8000
+
+Stop the containers
+
+docker compose down
+
+Environment Variables
+
+Create a .env file inside /backend:
+
+MONGO_URI=mongodb://db:27017/budgettracker
+PORT=8000
+   
+
+   
