@@ -20,6 +20,11 @@ A simple and intuitive web application to help users track their monthly income 
 - **Tools:** Visual Studio Code, Git, GitHub
 
 ---
+## Screenshots
+
+The application interface is shown below. These screenshots demonstrate the core features including adding, viewing, and managing expenses.
+
+All images are located in the `/screenshots` folder.
 
 ## Installation
 
