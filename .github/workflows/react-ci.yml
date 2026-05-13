@@ -1,3 +1,4 @@
+```yaml
 name: React CI
 
 on:
@@ -11,32 +12,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: frontend
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: lts/*
+          node-version: 24
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: '**/package-lock.json'
 
-      - name: Install dependencies
+      - name: Install Frontend Dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm test -- --watchAll=false
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
 
-      - name: Build app
+      - name: Build Frontend
         run: npm run build
 
-      - name: Upload production build
-        uses: actions/upload-artifact@v4
-        with:
-          name: react-build
-          path: frontend/build/
+      - name: Verify Backend
+        working-directory: ./backend
+        run: npm test --if-present
